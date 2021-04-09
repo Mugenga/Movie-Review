@@ -27,7 +27,13 @@
             </div>
         </div>
         <h3>Reviews</h3>
+        {% if movie.Reviews %}
+
+        {% else %}
+            <p>No reviews yet</p>
+        {% endif %}
         <div class="row g-5 py-5">
+
             {% for review in movie.Reviews %}
                 <div class="feature col-md-3">
                     <h5>{{ review.reviewer_name }}</h5>

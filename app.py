@@ -3,7 +3,7 @@ import string
 from flask import Flask, render_template, request
 
 from controllers import get_movies, get_reviews
-from models import db, ma, MoviesSchema, ReviewsSchema
+from models import db, ma, MoviesSchema, ReviewsSchema, Reviews
 
 import tensorflow as tf
 import pandas as pd
@@ -36,31 +36,51 @@ def hello_world():
 @app.route('/review/<movie_id>', methods=["POST", "GET"])
 def review(movie_id):
     movie = get_reviews(movie_id)
+    message = ""
     if request.method == 'POST':
         name = request.form.get('name')
         review_txt = request.form.get('review')
+        if name != '' or review_txt != '':
+            try:
+                df = pd.DataFrame({"review": [review_txt]})
 
-        df = pd.DataFrame({"review": [review_txt]})
+                # Clean Data
+                content = df['review'].apply(lambda x: clean_text(x))
+                print(content)
 
-        # Clean Data
-        content = df['review'].apply(lambda x: clean_text(x))
-        print(content)
+                # Import Model
+                model = tf.keras.models.load_model('movie_review_model')
 
-        # Import Model
-        model = tf.keras.models.load_model('movie_review_model.sav/saved_model.pb')
+                # Preparing the tokenizer
+                tokenizer = Tokenizer(num_words=100)
+                encoded_text = tokenizer.texts_to_sequences([content[0]])
+                max_length = 2
+                padded_text = pad_sequences(encoded_text, maxlen=max_length, padding='post')
 
-        # Preparing the tokenizer
-        tokenizer = Tokenizer(num_words=100)
-        encoded_text = tokenizer.texts_to_sequences([content[0]])
-        max_length = 2
-        padded_text = pad_sequences(encoded_text, maxlen=max_length, padding='post')
+                # Predict
+                prediction = model.predict(padded_text)
+            except Exception as e:
+                message = "Operation Failed! Please try again"
+            print(int(prediction[0]))
 
-        # Predict
-        prediction = model.predict(padded_text)
-        # prediction = scaler.inverse_transform(prediction)
-        print(prediction)
+            book = Reviews(reviewer_name=name, review=review_txt, rating=int(prediction[0]), movie_id=movie_id)
 
-    return render_template("review.html", movie=movie)
+            failed = False
+            db.session.add(book)
+            try:
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                db.session.flush()  # for resetting non-commited .add()
+                failed = True
+            if failed:
+                message = "Operation Failed! Please try again"
+            else:
+                message = "Your review received a " + str(prediction[0]) + " Star rating"
+        else:
+            message = "Please enter a name and review"
+
+    return render_template("review.html", movie=movie, message=message)
 
 
 def get_wordnet_pos(pos_tag):

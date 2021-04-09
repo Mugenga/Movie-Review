@@ -51,7 +51,9 @@
     <link href="features.css" rel="stylesheet">
 </head>
 <body>
-
+{% if message %}
+<div class="alert alert-success text-center">{{ message }}</div>
+{% endif %}
 {% block body %}{% endblock %}
 
 <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js"

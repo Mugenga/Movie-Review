@@ -9,21 +9,13 @@
                     <div class="">
                         <img src="{{ movie.image_url }}" width="70%" height="">
                     </div>
-                    <h2>{{ movie.movie_name }}</h2>
-                    <p>{{ movie.movie_name }}</p>
+                    <h3>{{ movie.movie_name }}</h3>
                     <a href="/review/{{ movie.id }}" class="icon-link">
                         Read Reviews
                         <svg class="bi" width="1em" height="1em">
                             <use xlink:href="#chevron-right"/>
                         </svg>
                     </a>
-                    <div>
-                        <span class="fa fa-star {% if movie.rating >= 1 %} checked  {% endif %}"></span>
-                        <span class="fa fa-star {% if movie.rating >= 2 %} checked  {% endif %}"></span>
-                        <span class="fa fa-star {% if movie.rating >= 3 %} checked  {% endif %}"></span>
-                        <span class="fa fa-star {% if movie.rating >= 4 %} checked  {% endif %}"></span>
-                        <span class="fa fa-star {% if movie.rating >= 5 %} checked  {% endif %}"></span>
-                    </div>
                 </div>
             {% endfor %}
         </div>

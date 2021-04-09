@@ -8,7 +8,7 @@ def get_movies(movies_schema: MoviesSchema):
 
 
 def get_reviews(movie_id):
-    return Movies.query.get(movie_id)
+    return Movies.query.order_by("reviews.id desc").get(movie_id)
 
 #
 # def get_featured_services(services: ServicesSchema):
@@ -28,11 +28,4 @@ def get_reviews(movie_id):
 #
 #
 # def get_service(user_id):
-#     return Services.query.get(user_id)
 
-
-# def get_services_count(cat_id):
-#     filter_data = {'category_id': cat_id}
-#     filter_data = {key: value for (key, value) in filter_data.items()
-#                    if value}
-#     return Services.query.filter_by(**filter_data).count()
