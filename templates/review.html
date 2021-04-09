@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="container py-5" id="featured-3">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h2>{{ movie.movie_name }}</h2>
+            </div>
+            <div class="col-sm-4 text-center">
+                <img src="{{ movie.image_url }}" height="200px"/>
+            </div>
+            <div class="col-sm-8 ">
+                <h5>Leave your review here</h5>
+                <form method="post" action="/review/{{ movie.id }}" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="firstName">Name</label>
+                            <input type="text" class="form-control" placeholder="Name" name="name">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="firstName">Review</label>
+                            <textarea type="text" class="form-control" id="article" name="review" placeholder=""
+                                      height="100px" required></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Review</button>
+                </form>
+            </div>
+        </div>
+        <h3>Reviews</h3>
+        <div class="row g-5 py-5">
+            {% for review in movie.Reviews %}
+                <div class="feature col-md-3">
+                    <h5>{{ review.reviewer_name }}</h5>
+                    <p>{{ review.review }}</p>
+                    <div>
+                        <span class="fa fa-star {% if review.rating >= 1 %} checked  {% endif %}"></span>
+                        <span class="fa fa-star {% if review.rating >= 2 %} checked  {% endif %}"></span>
+                        <span class="fa fa-star {% if review.rating >= 3 %} checked  {% endif %}"></span>
+                        <span class="fa fa-star {% if review.rating >= 4 %} checked  {% endif %}"></span>
+                        <span class="fa fa-star {% if review.rating >= 5 %} checked  {% endif %}"></span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
