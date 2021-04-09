@@ -9,6 +9,11 @@ flask-marshmallow = "*"
 flask-sqlalchemy = "*"
 mysql-connector-python = "*"
 marshmallow-sqlalchemy = "*"
+pandas = "*"
+sklearn = "*"
+tensorflow = "*"
+scikit-learn = "==0.22.2.post1"
+nltk = "*"
 
 [dev-packages]
 
