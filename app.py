@@ -47,7 +47,7 @@ def review(movie_id):
         print(content)
 
         # Import Model
-        model = tf.keras.models.load_model('movie_review_model.sav')
+        model = tf.keras.models.load_model('movie_review_model.sav/saved_model.pb')
 
         # Preparing the tokenizer
         tokenizer = Tokenizer(num_words=100)
@@ -100,4 +100,4 @@ def clean_text(text):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=6000)
